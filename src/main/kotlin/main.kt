@@ -7,6 +7,8 @@ suspend fun main() {
         ?: throw Exception("Must include bot token in environment variable for bot to run")
     val kord = Kord(discordToken)
 
+    println("Initializing")
+
     val commandRegex = "!opr (\\d+)".toRegex()
 
     kord.on<MessageCreateEvent> {

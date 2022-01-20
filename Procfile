@@ -1,1 +1,1 @@
-worker: java -jar build/libs/OprBot-0.0.0.jar
+worker: java -jar build/libs/OprBot-0.0.0-all.jar

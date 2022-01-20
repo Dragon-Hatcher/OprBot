@@ -3,20 +3,22 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 
 suspend fun main() {
-    val token = System.getenv("BOT_TOKEN")
+    val discordToken = System.getenv("BOT_TOKEN")
         ?: throw Exception("Must include bot token in environment variable for bot to run")
-    val kord = Kord(token)
+    val kord = Kord(discordToken)
 
-    kord.on<MessageCreateEvent> {//runs every time a message is created that our bot can read
+    val commandRegex = "!opr (\\d+)".toRegex()
+
+    kord.on<MessageCreateEvent> {
 
         //ignore other bots, even ourselves. We only serve humans here!
         if(message.author?.isBot != false) return@on
 
-        //check if our command is being invoked
-        if(message.content != "!ping") return@on
+        val command = commandRegex.find(message.content.trim()) ?: return@on
+        val teamNumber = command.groups[1]!!.value.toInt()
 
         //all clear, give them the pong!
-        message.channel.createMessage("pong!")
+        message.channel.createMessage("I would find info on team $teamNumber")
     }
 
     kord.login()

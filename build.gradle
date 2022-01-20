@@ -1,9 +1,3 @@
-buildscript {
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.1'
-    }
-}
-
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
@@ -18,10 +12,10 @@ repositories {
 }
 
 dependencies {
+    implementation("dev.kord:kord-core:0.8.0-M8")
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    implementation("me.jakejmattson:DiscordKt:0.22.0")
 }
 
 test {
@@ -29,11 +23,11 @@ test {
 }
 
 jar {
+    duplicatesStrategy = 'exclude'
     manifest {
         attributes "Main-Class": "MainKt"
     }
-}
-
-shadowJar {
-    mergeServiceFiles()
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

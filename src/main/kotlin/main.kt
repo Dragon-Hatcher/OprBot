@@ -14,6 +14,7 @@ suspend fun main() {
         //ignore other bots, even ourselves. We only serve humans here!
         if(message.author?.isBot != false) return@on
 
+        println(message.content)
         val command = commandRegex.find(message.content.trim()) ?: return@on
         val teamNumber = command.groups[1]!!.value.toInt()
 

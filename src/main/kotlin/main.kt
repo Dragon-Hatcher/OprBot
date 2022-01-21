@@ -12,16 +12,18 @@ suspend fun main() {
     val commandRegex = "!opr (\\d+)".toRegex()
 
     kord.on<MessageCreateEvent> {
-
-        //ignore other bots, even ourselves. We only serve humans here!
         if(message.author?.isBot != false) return@on
 
         println(message.content)
         val command = commandRegex.find(message.content.trim()) ?: return@on
         val teamNumber = command.groups[1]!!.value.toInt()
 
-        //all clear, give them the pong!
-        message.channel.createMessage("I would find info on team $teamNumber")
+        val oprs = getOPRs(teamNumber)?.sortedDescending()
+        message.channel.createMessage(when {
+            oprs == null -> "There was an error fetching the data."
+            oprs.isEmpty() -> "We don't have any OPRs for team $teamNumber this season."
+            else -> "Team $teamNumber's best OPR this season is ${oprs.maxOf { it }}"
+        })
     }
 
     kord.login()

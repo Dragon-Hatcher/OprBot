@@ -25,8 +25,6 @@ private fun getFromTOAApi(data: String): JsonArray? {
     return Json.parseToJsonElement(response.body()).jsonArray
 }
 
-typealias EventId = String
-
 fun getOPRs(teamNumber: Int): List<Double>? {
     val rankings = getRankings(teamNumber) ?: return null
     return rankings.map { it["opr"].toString().toDouble() }
